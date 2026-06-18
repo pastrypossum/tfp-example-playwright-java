@@ -62,7 +62,7 @@ public class CardPaymentTests {
     }
 
     @Test
-    @Story("Stop payment if bank error")
+    @Story("Stop payment on bank error")
     @DisplayName("Card declined")
     public void cardDeclined() {
 

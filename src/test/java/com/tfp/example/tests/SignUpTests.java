@@ -15,8 +15,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static com.tfp.example.domain.PaymentCardTestData.ACCEPTED_TEST_CARD;
 import static com.tfp.example.domain.MemberTestData.ROBERT;
 
-@Feature("E2E sign up")
-@DisplayName("E2E sign up")
+@Feature("Membership sign up")
+@DisplayName("Membership sign up")
 @Execution(ExecutionMode.SAME_THREAD)
 public class SignUpTests {
 
