@@ -12,6 +12,7 @@ Tests include the following:
  - One negative test showing handling of card decline error
 
 Test failures are expected due to international issues.
+
 Inclusion of failing tests is intentional to demonstrate working assertions and reporting.
 
 ## Getting Started
@@ -33,13 +34,15 @@ Inclusion of failing tests is intentional to demonstrate working assertions and 
 - **Maven Failsafe 3.3.1** — Runs integration tests (acceptance tests)
 - **Maven Compiler 3.13.0** — Compiles Java 21 source
 
-Local development will require a global playwright MCP / CLI installation
+Local development will require a global playwright MCP / CLI installation.
+
 Using CLI is preferred for more efficient token usage.
 
 
 ### Installing
 
 Clone from https://github.com/pastrypossum/tfp-example-playwright-java
+
 Execute tests and generate reports (see executing program section below)
 
 ### Executing program
@@ -49,7 +52,8 @@ Run the tests with
 mvn clean verify
 ```
 
-You can open target/site/allure-maven-plugin/index.html with intellij and let it serve the report.
+You can open `target/site/allure-maven-plugin/index.html` with intellij and let it serve the report.
+
 To serve reports from your local environment without intellij you will need to run the following command:
 ```
 mvn io.qameta.allure:allure-maven:serve
