@@ -13,6 +13,7 @@ public class MembershipTypePage {
     private final Locator oneOffPrice;
     private final Locator monthlyPrice;
     private final Locator continueButton;
+    private final Locator backButton;
 
     public MembershipTypePage(Page page) {
         this.page = page;
@@ -21,6 +22,7 @@ public class MembershipTypePage {
         this.oneOffPrice     = page.getByTestId("price-one_off");
         this.monthlyPrice    = page.getByTestId("price-monthly");
         this.continueButton  = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Continue to payment"));
+        this.backButton      = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Back"));
     }
 
     public Locator oneOffOption()  { return oneOffOption; }
@@ -41,8 +43,14 @@ public class MembershipTypePage {
     }
 
     @Step("Continue to payment from membership selection")
-    public void clickContinueToPayment() {
+    public void clickContinue() {
         continueButton.click();
+        page.waitForLoadState();
+    }
+
+    @Step("Back to member details")
+    public void clickBack() {
+        backButton.click();
         page.waitForLoadState();
     }
 }

@@ -3,6 +3,7 @@ package com.tfp.example.pages;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.tfp.example.domain.Member;
 import com.tfp.example.domain.PaymentCard;
 import io.qameta.allure.Step;
 
@@ -17,6 +18,7 @@ public class PaymentPage {
     private final Locator cardNumberField;
     private final Locator expiryField;
     private final Locator cvcField;
+    private final Locator backButton;
 
     public PaymentPage(Page page) {
         this.page = page;
@@ -28,6 +30,7 @@ public class PaymentPage {
         this.cardNumberField = page.getByLabel("Card number");
         this.expiryField = page.getByLabel("Expiry (MM/YY)");
         this.cvcField = page.getByLabel("CVC");
+        this.backButton = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Back"));
     }
 
     public Locator getSubHeader() {
@@ -59,5 +62,20 @@ public class PaymentPage {
     public void submitPayment() {
         submitButton.click();
         page.waitForLoadState();
+    }
+
+    public void clickBack() {
+        backButton.click();
+        page.waitForLoadState();
+    }
+
+    @Step("Read card details from the form")
+    public PaymentCard readDetails() {
+        return new PaymentCard(
+                cardholderField.inputValue(),
+                cardNumberField.inputValue(),
+                expiryField.inputValue(),
+                cvcField.inputValue()
+        );
     }
 }

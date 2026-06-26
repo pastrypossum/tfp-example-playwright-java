@@ -6,9 +6,13 @@ import com.microsoft.playwright.options.AriaRole;
 import com.tfp.example.domain.Member;
 import io.qameta.allure.Step;
 
+import java.util.List;
+
 public class MemberDetailsPage {
 
     private final Page page;
+    private final Locator mainHeader;
+    private final Locator subHeader;
     private final Locator firstNameField;
     private final Locator lastNameField;
     private final Locator emailField;
@@ -19,21 +23,29 @@ public class MemberDetailsPage {
     private final Locator cityField;
     private final Locator postcodeField;
     private final Locator countrySelect;
+    private final Locator countrySelectValue;
     private final Locator continueButton;
+    private final Locator backButton;
+    private final Locator errors;
 
     public MemberDetailsPage(Page page) {
         this.page = page;
-        this.firstNameField    = page.getByLabel("First name");
-        this.lastNameField     = page.getByLabel("Last name");
-        this.emailField        = page.getByLabel("Email address");
-        this.phoneField        = page.getByLabel("Phone number");
-        this.dobField          = page.getByLabel("Date of birth");
+        this.mainHeader = page.locator("h1");
+        this.subHeader = page.locator(".lede");
+        this.firstNameField = page.getByLabel("First name");
+        this.lastNameField = page.getByLabel("Last name");
+        this.emailField = page.getByLabel("Email address");
+        this.phoneField = page.getByLabel("Phone number");
+        this.dobField = page.getByLabel("Date of birth");
         this.addressLine1Field = page.getByLabel("Address line 1");
         this.addressLine2Field = page.getByLabel("Address line 2 (optional)");
-        this.cityField         = page.getByLabel("Town / city");
-        this.postcodeField     = page.getByLabel("Postcode / ZIP");
-        this.countrySelect     = page.getByLabel("Country");
-        this.continueButton    = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Continue"));
+        this.cityField = page.getByLabel("Town / city");
+        this.postcodeField = page.getByLabel("Postcode / ZIP");
+        this.countrySelect = page.getByLabel("Country");
+        this.countrySelectValue = page.locator("select[data-testid='field-country'] > option[selected='']");
+        this.continueButton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Continue"));
+        this.backButton = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Back"));
+        this.errors = page.locator(".field__error");
     }
 
     @Step("Fill in player details for {member.firstName} {member.lastName}")
@@ -57,5 +69,40 @@ public class MemberDetailsPage {
     public void clickContinue() {
         continueButton.click();
         page.waitForLoadState();
+    }
+
+    @Step("Back to club selection")
+    public void clickBack() {
+        backButton.click();
+        page.waitForLoadState();
+    }
+
+    public Locator getMainHeader() {
+        return mainHeader;
+    }
+
+    public Locator getSubHeader() {
+        return subHeader;
+    }
+
+    public List<String> getErrorMessages() {
+
+        return errors.allInnerTexts();
+    }
+
+    @Step("Read member details from the form")
+    public Member readDetails() {
+        return new Member(
+                firstNameField.inputValue(),
+                lastNameField.inputValue(),
+                emailField.inputValue(),
+                phoneField.inputValue(),
+                dobField.inputValue(),
+                addressLine1Field.inputValue(),
+                addressLine2Field.inputValue(),
+                cityField.inputValue(),
+                postcodeField.inputValue(),
+                countrySelectValue.textContent()
+        );
     }
 }

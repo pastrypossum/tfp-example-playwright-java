@@ -6,6 +6,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.AriaRole;
+import com.tfp.example.fixtures.PlaywrightRunner;
 import com.tfp.example.pages.*;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -21,54 +22,30 @@ import static com.tfp.example.domain.MemberTestData.ROBERT;
 
 @Feature("Card payment")
 @DisplayName("Card payment")
-@Execution(ExecutionMode.SAME_THREAD)
-public class CardPaymentTests {
+public class CardPaymentTests extends PlaywrightRunner {
 
-    private static final String APP_URL = "https://jonathan-riddell.assessment.teamfeepay.dev/s/TjbCZQg7iXx9dDNsufnYHwy8";
+    // Display empty form
 
-    private Playwright playwright;
-    private Browser browser;
-    private BrowserContext context;
-    private Page page;
+    // Validation of card details
 
-    private ClubSelectionPage clubPage;
-    private MemberDetailsPage detailsPage;
-    private MembershipTypePage membershipPage;
-    private PaymentPage paymentPage;
-    private ConfirmationPage confirmationPage;
+    // Mandatory fields
 
-    @BeforeEach
-    public void setUp() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch();
-        context = browser.newContext();
-        page = context.newPage();
+    // Field validation - name
+    // Field validation - number
+    // Field validation - expiry
+    // Field validation - cvc
+    // Field validation - expiry
 
-        page.navigate(APP_URL);
-        page.waitForLoadState();
 
-        clubPage = new ClubSelectionPage(page);
-        detailsPage = new MemberDetailsPage(page);
-        membershipPage = new MembershipTypePage(page);
-        paymentPage = new PaymentPage(page);
-        confirmationPage = new ConfirmationPage(page);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        if (context != null) context.close();
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
-    }
 
     @Test
     @Story("Stop payment on bank error")
     @DisplayName("Card declined")
     public void cardDeclined() {
 
-        clubPage.selectClub("Riverside Rovers FC").clickContinue();
-        detailsPage.fillDetails(ROBERT.getInfo()).clickContinue();
-        membershipPage.selectMonthly().clickContinueToPayment();
+        clubSelectionPage.selectClub("Riverside Rovers FC").clickContinue();
+        memberDetailsPage.fillDetails(ROBERT.getInfo()).clickContinue();
+        membershipTypePage.selectMonthly().clickContinue();
         paymentPage.fillCardDetails(DECLINED_TEST_CARD.getInfo()).submitPayment();
 
         PlaywrightAssertions.assertThat(page.getByRole(AriaRole.ALERT))
